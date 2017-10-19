@@ -1,0 +1,9 @@
+ average interarrival time: 2.018318607395641
+average service time: 1.5
+average delay: 2.101664507990214
+average wait: 3.601664507990201
+
+ average interarrival time: 9.872038
+average service time: 0.14162643334996727
+average delay: 0.25398617281619557
+average wait: 1.6702505063158688

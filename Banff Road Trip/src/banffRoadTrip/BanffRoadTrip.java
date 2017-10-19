@@ -14,16 +14,16 @@ public class BanffRoadTrip {
 
 	public BanffRoadTrip(String[] args) throws NumberFormatException, IOException
 	{
-		String [] serviceNames = new String[4];//"Deterministic.txt","Exponential.txt","HyperEx.txt","CorrEx.txt"];
-		String [] arrivalNames = new String[4];
-		serviceNames[0] = "Deterministic.txt";
-		serviceNames[1] = "Exponential.txt";
-		serviceNames[2] = "HyperEx.txt";
-		serviceNames[3] = "CorrEx.txt";
+		String [] serviceNames = new String[1];//"Deterministic.txt","Exponential.txt","HyperEx.txt","CorrEx.txt"];
+		String [] arrivalNames = new String[1];
+//		serviceNames[0] = "Deterministic.txt";
+		serviceNames[/*1*/0] = "Exponential.txt";
+//		serviceNames[2] = "HyperEx.txt";
+//		serviceNames[3] = "CorrEx.txt";
 		arrivalNames[0] = "0.5 Lambda.txt";
-		arrivalNames[1] = "0.55 Lambda.txt";
-		arrivalNames[2] = "0.6 Lambda.txt";
-		arrivalNames[3] = "0.65 Lambda.txt";
+//		arrivalNames[1] = "0.55 Lambda.txt";
+//		arrivalNames[2] = "0.6 Lambda.txt";
+//		arrivalNames[3] = "0.65 Lambda.txt";
 		LinkedList<double[]> serviceMethods = new LinkedList<double[]>();
 		LinkedList<double[]> arrivalRate = new LinkedList<double[]>();
 /*		double lowestLamb[] = getFile("0.5 Lambda.txt");
