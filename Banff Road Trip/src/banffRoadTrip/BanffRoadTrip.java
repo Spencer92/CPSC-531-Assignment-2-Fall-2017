@@ -14,16 +14,16 @@ public class BanffRoadTrip {
 
 	public BanffRoadTrip(String[] args) throws NumberFormatException, IOException
 	{
-		String [] serviceNames = new String[1];//"Deterministic.txt","Exponential.txt","HyperEx.txt","CorrEx.txt"];
-		String [] arrivalNames = new String[1];
-//		serviceNames[0] = "Deterministic.txt";
-		serviceNames[/*1*/0] = "Exponential.txt";
-//		serviceNames[2] = "HyperEx.txt";
-//		serviceNames[3] = "CorrEx.txt";
-		arrivalNames[0] = "0.5 Lambda.txt";
-//		arrivalNames[1] = "0.55 Lambda.txt";
-//		arrivalNames[2] = "0.6 Lambda.txt";
-//		arrivalNames[3] = "0.65 Lambda.txt";
+		String [] serviceNames = new String[4];//"Deterministic.txt","Exponential.txt","HyperEx.txt","CorrEx.txt"];
+		String [] arrivalNames = new String[4];
+		serviceNames[0] = "Deterministic";
+		serviceNames[1] = "Exponential";
+		serviceNames[2] = "HyperEx";
+		serviceNames[3] = "CorrEx";
+		arrivalNames[0] = "0.5 Lambda";
+		arrivalNames[1] = "0.55 Lambda";
+		arrivalNames[2] = "0.6 Lambda";
+		arrivalNames[3] = "0.65 Lambda";
 		LinkedList<double[]> serviceMethods = new LinkedList<double[]>();
 		LinkedList<double[]> arrivalRate = new LinkedList<double[]>();
 /*		double lowestLamb[] = getFile("0.5 Lambda.txt");
@@ -48,11 +48,11 @@ public class BanffRoadTrip {
 		
 		
 		
-		for(double [] arrival : arrivalRate)
+		for(int i = 0; i < arrivalRate.size(); i++)//double [] arrival : arrivalRate)
 		{
-			for(double [] service : serviceMethods)
+			for(int j = 0; j < serviceMethods.size(); j++)//double [] service : serviceMethods)
 			{
-				runSimulation(arrival,service);
+				runSimulation(arrivalRate.get(i),serviceMethods.get(j),arrivalNames[i],serviceNames[j]);
 			}
 		}
 		
@@ -60,7 +60,7 @@ public class BanffRoadTrip {
 		
 	}
 	
-	public void runSimulation(double[] lamda, double[] method)
+	public void runSimulation(double[] lambda, double[] method, String arrivalRate, String serviceType)
 	{
 		double arrival = 0;
 		double departure = 0;
@@ -71,10 +71,16 @@ public class BanffRoadTrip {
 		double sumWait = 0;
 		double sumService = 0;
 		double interarrival;
+		double [] stDev = new double[lambda.length];
+		double mean;
 		
-		for(int i = 0; i < lamda.length && i < method.length; i++)
+		
+		System.out.println("Statistics for " + serviceType + " at " + arrivalRate + ":");
+		
+		
+		for(int i = 0; i < lambda.length && i < method.length; i++)
 		{
-			arrival = lamda[i];
+			arrival = lambda[i];
 			service = method[i];
 			if(arrival < departure)
 			{
@@ -93,16 +99,24 @@ public class BanffRoadTrip {
 			
 		}
 		
-		System.out.println(" average interarrival time: " + arrival/lamda.length);
+		mean = sumService/method.length;
+		
+		for(int i = 0; i < stDev.length && i < method.length; i++)
+		{
+			stDev[i] = method[i]-mean;
+			stDev[i] *= stDev[i];
+		}
+		
+		System.out.println(" average interarrival time: " + arrival/lambda.length);
 		System.out.println("average service time: " + sumService/method.length);
-		System.out.println("average delay: " + sumDelay/lamda.length);
-		System.out.println("average wait: " + sumWait/lamda.length + "\n");
+		System.out.println("average delay: " + sumDelay/lambda.length);
+		System.out.println("average wait: " + sumWait/lambda.length + "\n");
 		
 	}
 	
 	public double[] getFile(String file) throws NumberFormatException, IOException
 	{
-		BufferedReader reader = new BufferedReader(new FileReader("..\\" + file));
+		BufferedReader reader = new BufferedReader(new FileReader("..\\" + file + ".txt"));
 		LinkedList<Double> storage = new LinkedList<Double>();
 		String input;
 		double convertedList[];
