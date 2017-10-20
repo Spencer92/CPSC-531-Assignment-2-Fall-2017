@@ -14,7 +14,7 @@ public class BanffRoadTrip {
 
 	public BanffRoadTrip(String[] args) throws NumberFormatException, IOException
 	{
-		String [] serviceNames = new String[4];//"Deterministic.txt","Exponential.txt","HyperEx.txt","CorrEx.txt"];
+		String [] serviceNames = new String[4];
 		String [] arrivalNames = new String[4];
 		serviceNames[0] = "Deterministic";
 		serviceNames[1] = "Exponential";
@@ -26,10 +26,6 @@ public class BanffRoadTrip {
 		arrivalNames[3] = "0.65 Lambda";
 		LinkedList<double[]> serviceMethods = new LinkedList<double[]>();
 		LinkedList<double[]> arrivalRate = new LinkedList<double[]>();
-/*		double lowestLamb[] = getFile("0.5 Lambda.txt");
-		double sLowestLamb[] = getFile("0.55 Lambda.txt");
-		double sHighestLamb[] = getFile("0.6 Lambda.txt");
-		double highestLamb[] = getFile("0.65 Lambda.txt");*/
 		
 		for(int i = 0; i < serviceNames.length; i++)
 		{
@@ -41,26 +37,20 @@ public class BanffRoadTrip {
 			arrivalRate.add(getFile(arrivalNames[i]));
 		}
 		
-/*		double deterministic[] = getFile("Deterministic.txt");
-		double expoential[] = getFile("Exponential.txt");
-		double hyperEx[] = getFile("HyperEx.txt");
-		double corrEx[] = getFile("CorrEx.txt");*/
 		
 		
-		
-		for(int i = 0; i < arrivalRate.size(); i++)//double [] arrival : arrivalRate)
+		for(int i = 0; i < arrivalRate.size(); i++)
 		{
-			for(int j = 0; j < serviceMethods.size(); j++)//double [] service : serviceMethods)
+			for(int j = 0; j < serviceMethods.size(); j++)
 			{
 				runSimulation(arrivalRate.get(i),serviceMethods.get(j),arrivalNames[i],serviceNames[j]);
 			}
 		}
 		
-//		runSimulation(lowestLamb,hyperEx);
 		
 	}
 	
-	public void runSimulation(double[] lambda, double[] method, String arrivalRate, String serviceType)
+	public void runSimulation(double[] arrivals, double[] method, String arrivalRate, String serviceType)
 	{
 		double arrival = 0;
 		double departure = 0;
@@ -68,19 +58,17 @@ public class BanffRoadTrip {
 		double service;
 		double wait;
 		double sumDelay = 0;
-		double sumWait = 0;
-		double sumService = 0;
-		double interarrival;
-		double [] stDev = new double[lambda.length];
+		double [] adjustedTimes = new double[arrivals.length];
+		double standardDeviation;
+		double adjustedTotal = 0;
 		double mean;
-		
 		
 		System.out.println("Statistics for " + serviceType + " at " + arrivalRate + ":");
 		
 		
-		for(int i = 0; i < lambda.length && i < method.length; i++)
+		for(int i = 0; i < arrivals.length && i < method.length; i++)
 		{
-			arrival = lambda[i];
+			arrival = arrivals[i];
 			service = method[i];
 			if(arrival < departure)
 			{
@@ -94,23 +82,26 @@ public class BanffRoadTrip {
 			wait = delay + service;
 			departure = arrival + wait;
 			sumDelay += delay;
-			sumWait += wait;
-			sumService += service;
 			
 		}
 		
-		mean = sumService/method.length;
+		mean = sumDelay/method.length;
 		
-		for(int i = 0; i < stDev.length && i < method.length; i++)
+		for(int i = 0; i < adjustedTimes.length && i < method.length; i++)
 		{
-			stDev[i] = method[i]-mean;
-			stDev[i] *= stDev[i];
+			adjustedTimes[i] = method[i]-mean;
+			adjustedTimes[i] *= adjustedTimes[i];
+			adjustedTotal += adjustedTimes[i];
 		}
 		
-		System.out.println(" average interarrival time: " + arrival/lambda.length);
-		System.out.println("average service time: " + sumService/method.length);
-		System.out.println("average delay: " + sumDelay/lambda.length);
-		System.out.println("average wait: " + sumWait/lambda.length + "\n");
+		
+		
+		standardDeviation = adjustedTotal/adjustedTimes.length;
+		standardDeviation = Math.sqrt(standardDeviation);
+		
+		
+		System.out.println("mean: " + mean);
+		System.out.println("Standard deviation: " + standardDeviation  + "\n");
 		
 	}
 	
