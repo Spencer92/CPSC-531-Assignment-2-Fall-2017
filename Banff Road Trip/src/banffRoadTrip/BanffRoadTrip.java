@@ -108,6 +108,8 @@ public class BanffRoadTrip {
 		{
 			arrivalTime = arrivalTimes[i];
 			serviceTime = serviceTimes[i];
+			
+			//if the car arrived before service was done, then there was delay
 			if(arrivalTime < departureTime)
 			{
 				delayAmount = departureTime - arrivalTime;
