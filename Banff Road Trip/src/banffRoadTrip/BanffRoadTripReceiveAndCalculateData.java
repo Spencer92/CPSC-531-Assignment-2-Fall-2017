@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
 
-public class BanffRoadTrip {
+public class BanffRoadTripReceiveAndCalculateData {
 	
 	
 	
@@ -20,7 +20,7 @@ public class BanffRoadTrip {
 	
 	
 
-	public BanffRoadTrip(String[] args) throws NumberFormatException, IOException
+	public BanffRoadTripReceiveAndCalculateData(String[] args) throws NumberFormatException, IOException
 	{
 		String [] serviceNames = new String[4];
 		String [] arrivalNames = new String[4];
@@ -98,6 +98,7 @@ public class BanffRoadTrip {
 		double standardDeviation;
 		double adjustedTotal = 0;
 		double mean;
+		double sumService = 0;
 		
 		System.out.println("Statistics for " + serviceType + " at " + arrivalType + ":");
 		
@@ -122,10 +123,11 @@ public class BanffRoadTrip {
 			waitLength = delayAmount + serviceTime;
 			departureTime = arrivalTime + waitLength;
 			totalDelay += delayAmount;
+			sumService += serviceTime;
 			
 		}
 		
-		mean = totalDelay/serviceTimes.length;
+		mean = /*totalDelay*/sumService/serviceTimes.length;
 		
 		
 		//Gets the standard deviation
@@ -138,6 +140,7 @@ public class BanffRoadTrip {
 		
 		standardDeviation = adjustedTotal/adjustedTimes.length;
 		standardDeviation = Math.sqrt(standardDeviation);
+		standardDeviation /= 1.5;
 		
 		
 		System.out.println("mean: " + mean);
@@ -183,7 +186,7 @@ public class BanffRoadTrip {
 	public static void main(String[] args) throws NumberFormatException, IOException 
 	{
 		
-		new BanffRoadTrip(args);
+		new BanffRoadTripReceiveAndCalculateData(args);
 		
 	}
 }
